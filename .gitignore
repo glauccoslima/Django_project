@@ -1,50 +1,12 @@
-# Ignore a pasta do ambiente virtual
+# Ignorar o ambiente virtual
 venv/
 
 # Ignorar arquivos de cache do Python
 __pycache__/
-*.py[cod]
-*.pyo
+*.pyc
 
-# Ignorar arquivos de banco de dados
+# Ignorar o banco de dados SQLite
 db.sqlite3
 
-# Arquivos e pastas gerados automaticamente
-*.log
-*.pot
-*.pyc
-*.mo
-*.compiled
-*.egg-info/
-*.eggs/
-*.lock
-
-# Diretórios de build
-build/
-dist/
-
-# Ignorar dependências e metadados de pacotes
-*.egg
-*.egg-info/
-.Python
-*.whl
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Arquivos do sistema operacional
-.DS_Store
-Thumbs.db
-
-# Configurações do IDE (VSCode, PyCharm, etc.)
-.vscode/
-.idea/
-*.iml
-
-# Licenças e arquivos gerados por dependências de terceiros
-LICENSE.txt
-AUTHORS.txt
-README.txt
-vendor.txt
-top_level.txt
-entry_points.txt
-
+# Ignorar o arquivo temporário gerado para a árvore de diretórios
+arvore_diretorios.txt
