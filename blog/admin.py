@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Post  # Importa o modelo Post do módulo models
 
-# Register your models here.
+# Registra o modelo Post no site de administração do Django
+admin.site.register(Post)
