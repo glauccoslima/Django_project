@@ -1,37 +1,45 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
-# Modelo Author - Relacionamento 1:1 com User
+# Modelo Author - Relacionamento um-para-um com o modelo User do Django
 class Author(models.Model):
-    # Campo de relacionamento um-para-um com o modelo User do Django
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # Campo de texto para a biografia do autor
-    bio = models.TextField()
+    bio = models.TextField(verbose_name="Biografia", help_text="Digite uma breve biografia do autor")
 
-    # Método para retornar o nome de usuário do autor como string
+    class Meta:
+        verbose_name = "Autor"
+        verbose_name_plural = "Autores"
+
     def __str__(self):
         return self.user.username
 
 
-# Modelo Post - Relacionamento 1:N com Author
+# Modelo Post - Relacionamento muitos-para-um com o modelo Author
 class Post(models.Model):
-    # Definição das opções de status do post
+    # Definindo as opções de status do post
     STATUS_CHOICES = (
-        (0, 'Draft'),  # Rascunho
-        (1, 'Published')  # Publicado
+        (0, 'Rascunho'),
+        (1, 'Publicado'),
     )
 
-    # Campo de texto para o título do post, com limite de 200 caracteres
-    title = models.CharField(max_length=200)
-    # Campo de texto para o conteúdo do post
-    content = models.TextField()
-    # Campo de relacionamento muitos-para-um com o modelo Author
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    # Campo de data e hora para a criação do post, preenchido automaticamente
-    created_on = models.DateTimeField(auto_now_add=True)
-    # Campo inteiro para o status do post, com opções definidas em STATUS_CHOICES e valor padrão 0 (Rascunho)
-    status = models.IntegerField(choices=STATUS_CHOICES, default=0)
+    title = models.CharField(max_length=200, verbose_name="Título")
+    slug = models.SlugField(max_length=200, unique=True, verbose_name="Slug", blank=True)  # Adicionado blank=True
+    content = models.TextField(verbose_name="Conteúdo")
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name="Autor")
+    created_on = models.DateTimeField(auto_now_add=True, verbose_name="Data de criação")
+    status = models.IntegerField(choices=STATUS_CHOICES, default=0, verbose_name="Status")
 
-    # Método para retornar o título do post como string
+    class Meta:
+        ordering = ['-created_on']  # Ordena posts mais recentes primeiro
+        verbose_name = "Post"
+        verbose_name_plural = "Posts"
+
     def __str__(self):
         return self.title
+
+    # Sobrescrever o método save para gerar automaticamente o slug
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Gerar slug apenas se não estiver preenchido
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)

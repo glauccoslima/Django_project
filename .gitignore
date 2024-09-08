@@ -10,3 +10,6 @@ db.sqlite3
 
 # Ignorar o arquivo temporário gerado para a árvore de diretórios
 arvore_diretorios.txt
+
+# Ignorar arquivos estáticos coletados dinamicamente
+staticfiles/
