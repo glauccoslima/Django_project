@@ -1,14 +1,15 @@
-# Importa o módulo admin do Django para gerenciar o site de administração
 from django.contrib import admin
-# Importa a função path do módulo django.urls para definir rotas URL
 from django.urls import path
-# Importa a classe PostView do módulo blog.views para associar a uma rota URL
 from blog.views import PostView
+from django.conf import settings
+from django.conf.urls.static import static
 
-# Lista de padrões de URL para o projeto
 urlpatterns = [
-    # Rota para a interface de administração do Django
-    path('admin/', admin.site.urls),
-    # Rota para a view PostView, acessível via /home
-    path('home/', PostView.as_view(), name='home-view'),  # Rota /home para a PostView
+    path('admin/', admin.site.urls),  # Django Admin habilitado
+    path('home/', PostView.as_view(), name='home-view'),
 ]
+
+# Servir arquivos estáticos e de mídia durante o desenvolvimento
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
