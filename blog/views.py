@@ -1,12 +1,22 @@
-# Importa a classe HttpResponse do módulo django.http para criar respostas HTTP
-from django.http import HttpResponse
-# Importa a classe View do módulo django.views para criar views baseadas em classes
+from django.shortcuts import render, get_object_or_404
 from django.views import View
+from .models import Post
 
-# Define uma classe PostView que herda de View
+# View para a página inicial (index.html), que lista os posts
 class PostView(View):
-    # Define um método GET para a classe PostView
     @staticmethod  # Converte o método em um método estático, pois não usa a instância da classe
     def get(request):
-        # Retorna uma resposta HTTP com o texto "Hello World!"
-        return HttpResponse("Hello World!")
+        # Obtém todos os posts do banco de dados
+        post_list = Post.objects.all()
+        # Renderiza o template 'index.html' passando a lista de posts
+        return render(request, 'index.html', {'post_list': post_list})
+
+
+# View para exibir o detalhe de um post específico (post_detail.html)
+class PostDetailView(View):
+    @staticmethod  # Converte o método em um método estático, pois não usa a instância da classe
+    def get(request, slug):
+        # Obtém o post correspondente ao slug ou retorna 404 se não encontrado
+        post = get_object_or_404(Post, slug=slug)
+        # Renderiza o template 'post_detail.html' com o post especificado
+        return render(request, 'post_detail.html', {'post': post})
